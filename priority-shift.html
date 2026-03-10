@@ -477,7 +477,6 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;hei
     <button class="sb-btn"        data-p="pinjol"    onclick="go('pinjol')">    <span class="sb-icon"></span><span class="sb-label">Sim. Pinjol</span></button>
     <button class="sb-btn"        data-p="challenge" onclick="go('challenge')"> <span class="sb-icon"></span><span class="sb-label">30 Days</span></button>
     <button class="sb-btn"        data-p="community" onclick="go('community')"> <span class="sb-icon"></span><span class="sb-label">Komunitas</span></button>
-    <button class="sb-btn"        data-p="chatbot"   onclick="go('chatbot')">   <span class="sb-icon"></span><span class="sb-label">AI Advisor</span></button>
   </nav>
   <div class="sb-footer">
     <div class="sb-live"><div class="sb-live-dot"></div><span class="sb-live-txt">Mode Demo
@@ -522,7 +521,6 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;hei
         <div class="fc" onclick="go('antifomo')"  data-c="#f59e0b"><div class="fc-glow" style="background:radial-gradient(circle at top right,rgba(245,158,11,.18),transparent 70%)"></div><div class="fc-icon" style="color:var(--gold)">⏱</div><div class="fc-title">Anti-FOMO Reminder</div><div class="fc-desc">Kendalikan impuls belanja</div></div>
         <div class="fc" onclick="go('pinjol')"    data-c="#ef4444"><div class="fc-glow" style="background:radial-gradient(circle at top right,rgba(239,68,68,.18),transparent 70%)"></div><div class="fc-icon" style="color:var(--red)">⚠</div><div class="fc-title">Simulasi Bahaya Pinjol</div><div class="fc-desc">Lihat utang kecil jadi besar</div></div>
         <div class="fc" onclick="go('challenge')" data-c="#8b5cf6"><div class="fc-glow" style="background:radial-gradient(circle at top right,rgba(139,92,246,.18),transparent 70%)"></div><div class="fc-icon" style="color:var(--purple)">⏱</div><div class="fc-title">30 Days Challenge</div><div class="fc-desc">Bentuk kebiasaan finansial sehat</div></div>
-        <div class="fc" onclick="go('chatbot')"   data-c="#10b981"><div class="fc-glow" style="background:radial-gradient(circle at top right,rgba(16,185,129,.18),transparent 70%)"></div><div class="fc-icon" style="color:var(--emerald)">🤖</div><div class="fc-title">AI Financial Advisor</div><div class="fc-desc">Tanya apapun soal keuanganmu</div></div>
       </div>
     </section>
 
@@ -669,27 +667,7 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;hei
       </div>
     </section>
 
-    <!-- CHATBOT PAGE -->
-    <section class="page" id="page-chatbot">
-      <div class="ph-wrap">
-        <div class="ph-icon" style="color:var(--emerald)">🤖</div>
-        <h2 class="ph-title">AI Financial Advisor</h2>
-        <p class="ph-sub">Konsultasi keuangan personal dengan AI — gratis & rahasia</p>
-      </div>
-
-      <!-- API Key input area -->
-      <div id="page-apikey-section" style="margin-bottom:20px">
-        <div style="background:linear-gradient(135deg,rgba(16,185,129,.1),rgba(245,158,11,.06));border:1px solid rgba(16,185,129,.25);border-radius:14px;padding:18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
-          <div style="flex:1;min-width:200px">
-            <div style="color:var(--emerald);font-size:12px;font-weight:700;margin-bottom:4px">🔑 ANTHROPIC API KEY</div>
-            <div style="color:var(--dim);font-size:12px">Masukkan API key untuk mengaktifkan AI Advisor</div>
-          </div>
-          <div style="display:flex;gap:8px;flex:1;min-width:240px;align-items:center">
-            <input type="password" id="page-apikey-inp" placeholder="sk-ant-..." style="flex:1;font-family:'DM Mono',monospace;font-size:12px;padding:10px 12px;background:var(--dark2);border:1px solid var(--border);border-radius:9px;color:var(--text);outline:none"/>
-            <button onclick="savePageKey()" style="padding:10px 16px;background:linear-gradient(135deg,var(--emerald),#059669);border:none;border-radius:9px;color:#000;font-weight:700;font-size:13px;white-space:nowrap">Simpan</button>
-          </div>
-        </div>
-      </div>
+    
 
       <div style="display:flex;flex-direction:column;height:60vh;min-height:400px;background:var(--card);border:1px solid var(--border);border-radius:18px;overflow:hidden">
         <!-- Chat header -->
@@ -707,7 +685,6 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;hei
           <!-- Welcome message injected by JS -->
         </div>
 
-        <!-- Quick prompts -->
         <div style="padding:0 14px 8px;display:flex;gap:6px;flex-wrap:wrap;flex-shrink:0;border-top:1px solid var(--border);padding-top:10px">
           <button class="qp-btn" onclick="pageSendQuick('Bagaimana cara memulai dana darurat?')">💰 Dana Darurat</button>
           <button class="qp-btn" onclick="pageSendQuick('Tips menghindari pinjol berbahaya')">⚠️ Hindari Pinjol</button>
@@ -715,7 +692,6 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;hei
           <button class="qp-btn" onclick="pageSendQuick('Bagaimana atur gaji pertama?')">💼 Gaji Pertama</button>
         </div>
 
-        <!-- Input -->
         <div style="padding:10px 14px 14px;display:flex;gap:8px;align-items:flex-end;flex-shrink:0">
           <textarea id="page-chat-input" placeholder="Tanya soal keuanganmu..." rows="1"
             style="flex:1;padding:10px 13px;background:var(--dark2);border:1px solid var(--border);border-radius:12px;color:var(--text);font-size:13px;outline:none;resize:none;max-height:100px;font-family:inherit;line-height:1.4;transition:border-color .2s"
@@ -742,8 +718,7 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;hei
       <button class="bn-btn"        data-p="antifomo"  onclick="go('antifomo')">  <span class="ni">⏱</span><span class="nl">FOMO</span></button>
       <button class="bn-btn"        data-p="pinjol"    onclick="go('pinjol')">    <span class="ni">⚠</span><span class="nl">Pinjol</span></button>
       <button class="bn-btn"        data-p="challenge" onclick="go('challenge')"> <span class="ni">⏱</span><span class="nl">30 Days</span></button>
-      <button class="bn-btn"        data-p="chatbot"   onclick="go('chatbot')">   <span class="ni">🤖</span><span class="nl">AI</span></button>
-    </div>
+      </div>
   </nav>
 </div>
 </div>
@@ -759,7 +734,6 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;hei
   <button class="sb-btn"        data-m="antifomo"  onclick="go('antifomo');closeDrawer()">  <span class="sb-icon">⏱</span><span class="sb-label">Anti-FOMO</span></button>
   <button class="sb-btn"        data-m="pinjol"    onclick="go('pinjol');closeDrawer()">    <span class="sb-icon">⚠</span><span class="sb-label">Sim. Pinjol</span></button>
   <button class="sb-btn"        data-m="challenge" onclick="go('challenge');closeDrawer()"> <span class="sb-icon">⏱</span><span class="sb-label">30 Days</span></button>
-  <button class="sb-btn"        data-m="chatbot"   onclick="go('chatbot');closeDrawer()">   <span class="sb-icon">🤖</span><span class="sb-label">AI Advisor</span></button>
 </div>
 
 <!-- Floating Chat Button -->
@@ -1071,28 +1045,21 @@ window.removeTyping = function() {
   if(t) t.remove();
 };
 
-// --- LOGIKA CHATBOT LOKAL (IF / ELSE) ---
 window.getLocalResponse = function(input) {
-  // Ubah input menjadi huruf kecil semua agar mudah dideteksi
   const text = input.toLowerCase();
 
-  // 1. Logika Dana Darurat
   if (text.includes('dana darurat')) {
     return "Dana darurat idealnya adalah:\n• **Single**: 3-6 kali pengeluaran bulanan.\n• **Menikah/Punya Tanggungan**: 6-12 kali pengeluaran bulanan.\n\nMulai sisihkan 10-20% dari gajimu setiap bulan ke rekening terpisah ya! 💰";
   } 
-  // 2. Logika Pinjol & Utang
   else if (text.includes('pinjol') || text.includes('utang') || text.includes('berbahaya')) {
     return "⚠️ **Tips Keluar & Menghindari Pinjol:**\n1. Stop gali lubang tutup lubang.\n2. Catat semua utang (pokok + bunga).\n3. Gunakan metode *Debt Avalanche* (bayar bunga tertinggi dulu) atau *Debt Snowball* (bayar sisa utang terkecil dulu).\n4. Jangan pernah coba-coba pinjol ilegal!";
   } 
-  // 3. Logika Investasi
   else if (text.includes('investasi') || text.includes('saham') || text.includes('reksa dana') || text.includes('pemula')) {
     return "📈 **Investasi untuk Pemula:**\nPastikan dana daruratmu aman dulu! Jika sudah, kamu bisa mulai dari:\n• **Reksa Dana Pasar Uang**: Risiko sangat rendah.\n• **SBN (Surat Berharga Negara)**: Dijamin negara.\n• **Emas**: Untuk simpanan jangka panjang.\n\nMulai aja dulu dengan Rp 100.000!";
   } 
-  // 4. Logika Budgeting / Gaji
   else if (text.includes('gaji') || text.includes('budget') || text.includes('anggaran') || text.includes('bulanan')) {
     return "💼 **Cara Atur Gaji/Budget Bulanan:**\nCoba metode **50/30/20**:\n• **50% Kebutuhan Pokok**: Kos, makan, transport.\n• **30% Keinginan**: Hangout, hobi.\n• **20% Tabungan/Investasi**: Dana darurat, masa depan.\n\nSesuaikan rasionya dengan kondisimu, yang penting sisihkan di awal bulan, bukan sisa di akhir!";
   } 
-  // 5. Fallback (Jika tidak ada kata kunci yang cocok)
   else {
     return "Maaf, aku belum mengenali pertanyaanmu. 😅\n\nCoba tanyakan seputar:\n• Cara memulai dana darurat\n• Tips menghindari pinjol\n• Investasi untuk pemula\n• Cara atur budget/gaji";
   }
@@ -1148,5 +1115,4 @@ window.clearChat = function() {
 
 </script>
 </body>
-
 </html>
