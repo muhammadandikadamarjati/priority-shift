@@ -1001,17 +1001,9 @@ chLoad();chRender();
 })();
 function likeP(b,n){const l=b.dataset.l==='1';b.dataset.l=l?'0':'1';b.textContent=`❤ ${l?n:n+1}`;b.style.color=l?'var(--dim)':'var(--red)'}
 
-// --- KONFIGURASI API KEY ---
-const HARDCODED_API_KEY = 'AIzaSyBm-Z7gIorEnNVip29ul0cfgdZHrkARWhk'; // Masukkan key Gemini di sini
-
 // --- STATE GLOBAL ---
 window.chatOpen = false;
 window.chatHistory = [];
-window.pageChatHistory = [];
-
-const SYS_PROMPT = `Kamu adalah Advisor Finansial AI dari platform PriorityShift. 
-Gunakan bahasa Indonesia yang santai, ramah, dan tidak menghakimi. 
-Gunakan bullet points (•) dan bold (**teks**) untuk poin penting.`;
 
 // --- FUNGSI UI CHAT ---
 window.toggleChat = function() {
@@ -1039,7 +1031,7 @@ window.toggleChat = function() {
 };
 
 window.addWelcomeMsg = function() {
-  window.appendMsg('bot', `Halo! 👋 Saya **Advisor Finansial AI** dari PriorityShift.\n\nAda yang ingin kamu tanyakan seputar keuangan, investasi, atau tips nabung? 💬`, true);
+  window.appendMsg('bot', `Halo! 👋 Saya **Advisor Finansial AI** dari PriorityShift.\n\nAda yang ingin kamu tanyakan seputar keuangan, investasi, atau tips nabung? 💬`);
 };
 
 window.appendMsg = function(role, text) {
@@ -1069,7 +1061,7 @@ window.appendTyping = function() {
   const div = document.createElement('div');
   div.className = 'msg-row';
   div.id = 'typing-indicator';
-  div.innerHTML = `<div class="msg-av">🤖</div><div class="msg-bubble bot">...</div>`;
+  div.innerHTML = `<div class="msg-av">🤖</div><div class="msg-bubble bot"><div class="typing-dot"><span></span><span></span><span></span></div></div>`;
   container.appendChild(div);
   container.scrollTop = container.scrollHeight;
 };
@@ -1079,20 +1071,67 @@ window.removeTyping = function() {
   if(t) t.remove();
 };
 
+// --- LOGIKA CHATBOT LOKAL (IF / ELSE) ---
+window.getLocalResponse = function(input) {
+  // Ubah input menjadi huruf kecil semua agar mudah dideteksi
+  const text = input.toLowerCase();
+
+  // 1. Logika Dana Darurat
+  if (text.includes('dana darurat')) {
+    return "Dana darurat idealnya adalah:\n• **Single**: 3-6 kali pengeluaran bulanan.\n• **Menikah/Punya Tanggungan**: 6-12 kali pengeluaran bulanan.\n\nMulai sisihkan 10-20% dari gajimu setiap bulan ke rekening terpisah ya! 💰";
+  } 
+  // 2. Logika Pinjol & Utang
+  else if (text.includes('pinjol') || text.includes('utang') || text.includes('berbahaya')) {
+    return "⚠️ **Tips Keluar & Menghindari Pinjol:**\n1. Stop gali lubang tutup lubang.\n2. Catat semua utang (pokok + bunga).\n3. Gunakan metode *Debt Avalanche* (bayar bunga tertinggi dulu) atau *Debt Snowball* (bayar sisa utang terkecil dulu).\n4. Jangan pernah coba-coba pinjol ilegal!";
+  } 
+  // 3. Logika Investasi
+  else if (text.includes('investasi') || text.includes('saham') || text.includes('reksa dana') || text.includes('pemula')) {
+    return "📈 **Investasi untuk Pemula:**\nPastikan dana daruratmu aman dulu! Jika sudah, kamu bisa mulai dari:\n• **Reksa Dana Pasar Uang**: Risiko sangat rendah.\n• **SBN (Surat Berharga Negara)**: Dijamin negara.\n• **Emas**: Untuk simpanan jangka panjang.\n\nMulai aja dulu dengan Rp 100.000!";
+  } 
+  // 4. Logika Budgeting / Gaji
+  else if (text.includes('gaji') || text.includes('budget') || text.includes('anggaran') || text.includes('bulanan')) {
+    return "💼 **Cara Atur Gaji/Budget Bulanan:**\nCoba metode **50/30/20**:\n• **50% Kebutuhan Pokok**: Kos, makan, transport.\n• **30% Keinginan**: Hangout, hobi.\n• **20% Tabungan/Investasi**: Dana darurat, masa depan.\n\nSesuaikan rasionya dengan kondisimu, yang penting sisihkan di awal bulan, bukan sisa di akhir!";
+  } 
+  // 5. Fallback (Jika tidak ada kata kunci yang cocok)
+  else {
+    return "Maaf, aku belum mengenali pertanyaanmu. 😅\n\nCoba tanyakan seputar:\n• Cara memulai dana darurat\n• Tips menghindari pinjol\n• Investasi untuk pemula\n• Cara atur budget/gaji";
+  }
+};
+
 // --- FUNGSI KIRIM PESAN ---
-window.sendMsg = async function() {
+window.sendMsg = function() {
   const inp = document.getElementById('chat-input');
   if(!inp) return;
   const txt = inp.value.trim();
   if(!txt) return;
   
+  // Reset input
   inp.value = ''; 
   inp.style.height = 'auto';
   
+  // Tambahkan pesan user ke UI
   window.appendMsg('user', txt);
   window.chatHistory.push({ role: 'user', content: txt });
   
-  await window.callAI();
+  const sendBtn = document.getElementById('chat-send');
+  if(sendBtn) sendBtn.disabled = true;
+
+  // Tampilkan indikator typing
+  window.appendTyping();
+
+  // Simulasi delay bot mengetik (1.2 detik)
+  setTimeout(() => {
+    window.removeTyping();
+    
+    // Dapatkan jawaban dari logika If/Else
+    const reply = window.getLocalResponse(txt);
+    
+    // Tambahkan pesan bot ke UI
+    window.appendMsg('bot', reply);
+    window.chatHistory.push({ role: 'assistant', content: reply });
+    
+    if(sendBtn) sendBtn.disabled = false;
+  }, 1200);
 };
 
 window.sendQuick = function(q) {
@@ -1101,83 +1140,13 @@ window.sendQuick = function(q) {
   window.sendMsg();
 };
 
-// --- FUNGSI API GEMINI ---
-window.callAI = async function() {
-  const sendBtn = document.getElementById('chat-send');
-  if(sendBtn) sendBtn.disabled = true;
-
-  window.appendTyping();
-
-  try {
-    const geminiMessages = window.chatHistory.map(m => ({
-      role: m.role === 'user' ? 'user' : 'model',
-      parts: [{ text: m.content }]
-    }));
-
-    const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash/generateContent?key=" + HARDCODED_API_KEY;
-
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        systemInstruction: { parts: [{ text: SYS_PROMPT }] },
-        contents: geminiMessages,
-        generationConfig: { maxOutputTokens: 1000 }
-      })
-    });
-
-    window.removeTyping();
-    const data = await res.json();
-
-    if(!res.ok){
-      const realError = data.error?.message || "Terjadi kesalahan API.";
-      window.appendMsg('bot', `❌ **Error:** ${realError}`);
-      window.chatHistory.pop();
-    } else {
-      const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Maaf, tidak ada respons.';
-      window.chatHistory.push({ role: 'assistant', content: reply });
-      window.appendMsg('bot', reply);
-    }
-  } catch(e) {
-    window.removeTyping();
-    window.chatHistory.pop();
-    window.appendMsg('bot', `🌐 **Koneksi bermasalah.** Cek internetmu.`);
-    console.error(e);
-  }
-
-  if(sendBtn) sendBtn.disabled = false;
+window.clearChat = function() {
+    document.getElementById('chat-msgs').innerHTML = '';
+    window.chatHistory = [];
+    window.addWelcomeMsg();
 };
-
-// --- EVENT LISTENERS TAMBAHAN ---
-document.addEventListener('DOMContentLoaded', () => {
-  // Pastikan tombol enter jalan
-  const inpChat = document.getElementById('chat-input');
-  if(inpChat) {
-    inpChat.addEventListener('keypress', (e) => {
-      if(e.key === 'Enter' && !e.shiftKey) { 
-        e.preventDefault(); 
-        window.sendMsg(); 
-      }
-    });
-  }
-
-  // Fallback pengaman untuk memastikan FAB bisa diklik jika onclick di HTML gagal
-  const chatFab = document.getElementById('chat-fab');
-  if(chatFab) {
-      chatFab.onclick = window.toggleChat;
-  }
-  
-  const chatCloseBtn = document.querySelector('.chat-close');
-  if(chatCloseBtn) {
-      chatCloseBtn.onclick = window.toggleChat;
-  }
-  
-  const chatSendBtn = document.getElementById('chat-send');
-  if(chatSendBtn) {
-      chatSendBtn.onclick = window.sendMsg;
-  }
-});
 
 </script>
 </body>
+
 </html>
